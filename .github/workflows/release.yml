@@ -24,12 +24,14 @@ jobs:
         with:
           gradle-version: "9.2.1"
 
-      - name: Read mod version
+      - name: Read versions
         id: version
         shell: bash
         run: |
-          echo "version=$(sed -n 's/^mod_version=//p' gradle.properties)" >> "$GITHUB_OUTPUT"
-          echo "minecraft=$(sed -n 's/^minecraft_version=//p' gradle.properties)" >> "$GITHUB_OUTPUT"
+          minecraft_version=$(sed -n 's/^minecraft_version=//p' gradle.properties)
+          mod_version=$(sed -n 's/^mod_version=//p' gradle.properties)
+          echo "version=${minecraft_version}-${mod_version}" >> "$GITHUB_OUTPUT"
+          echo "minecraft=${minecraft_version}" >> "$GITHUB_OUTPUT"
 
       - name: Build with Gradle
         run: gradle build
