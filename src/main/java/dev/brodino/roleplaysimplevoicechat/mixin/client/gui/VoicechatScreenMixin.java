@@ -1,8 +1,6 @@
 package dev.brodino.roleplaysimplevoicechat.mixin.client.gui;
 
 import de.maxhenkel.voicechat.gui.VoiceChatScreen;
-import de.maxhenkel.voicechat.gui.widgets.ImageButton;
-import de.maxhenkel.voicechat.gui.widgets.ToggleImageButton;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
@@ -33,13 +31,7 @@ public abstract class VoicechatScreenMixin {
                 // Group button: ButtonWidget whose message key is "message.voicechat.group"
                 if (button.getMessage().getContent() instanceof TranslatableTextContent ttc && ttc.getKey().equals("message.voicechat.group")) {
                     button.active = false;
-                    continue;
                 }
-            }
-
-            // Volumes button: the only non-toggle ImageButton in this screen
-            if (element instanceof ImageButton && !(element instanceof ToggleImageButton)) {
-                button.active = false;
             }
         }
     }

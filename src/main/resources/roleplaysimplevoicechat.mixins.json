@@ -14,7 +14,9 @@
     "client.gui.VoicechatScreenMixin",
     "client.gui.VoicechatSettingsMixin",
     "client.gui.accessors.ScreenAccessor",
-    "client.gui.accessors.VoicechatScreenAccessor"
+    "client.gui.accessors.VoicechatScreenAccessor",
+    "client.gui.volume.AdjustPlayerVolumeEntryMixin",
+    "client.gui.volume.PlayerVolumeEntryMixin"
   ],
   "injectors": {
     "defaultRequire": 1
