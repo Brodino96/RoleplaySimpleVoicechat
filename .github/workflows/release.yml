@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Setup Java
+        uses: actions/setup-java@v6.0.1
+        with:
+          java-version: "17"
+          distribution: temurin
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6.3.0
+        with:
+          gradle-version: "8.12"
+
+      - name: Read mod version
+        id: version
+        shell: bash
+        run: |
+          echo "version=$(sed -n 's/^mod_version=//p' gradle.properties)" >> "$GITHUB_OUTPUT"
+          echo "minecraft=$(sed -n 's/^minecraft_version=//p' gradle.properties)" >> "$GITHUB_OUTPUT"
+
+      - name: Build with Gradle
+        run: gradle build
+
+      - name: Publish release
+        uses: Kira-NT/mc-publish@v3.3.1
+        with:
+          name: SummonMounts ${{ steps.version.outputs.version }}
+          files: build/libs/!(*-@(dev|sources|javadoc)).jar
+          version: ${{ steps.version.outputs.version }}
+          version-type: release
+
+          loaders: fabric
+          game-versions: ${{ steps.version.outputs.minecraft }}
+          environment: client | server
+          dependencies: |
+            fabric@0.77.0+1.19.2(required){modrinth:P7dR8mSH}{curseforge:306612}
+            voicechat@1.19.2-2.6.13(required){modrinth:9eGKb6K1}{curseforge:416089}
+
+          github-tag: v${{ steps.version.outputs.version }}
+          github-generate-changelog: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+          modrinth-id: gOMURfOm
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+
+          curseforge-id: 1678834
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
